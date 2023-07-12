@@ -30,14 +30,43 @@ class BankAccount:
         for account in cls.accounts:
             print(f"Balance: ${account.balance}, Interest Rate: {account.int_rate * 100}%")
 
-
-samir_account = BankAccount(0.02, 1000)
-samira_account = BankAccount(0.03, 500)
-samir_account.deposit(200).deposit(2000).deposit(5000).withdraw(
-    400
-).yield_interest().display_account_info()
-samira_account.deposit(2050).deposit(20500).withdraw(4200).withdraw(4100).withdraw(
-    4200
-).withdraw(4200).display_account_info()
-BankAccount.print_all_accounts()
-
+class User:
+    def __init__(self, name):
+        self.name = name
+        self.accounts = {}
+    
+    def create_account(self, account_name, int_rate, balance=0):
+        account = BankAccount(int_rate, balance)
+        self.accounts[account_name] = account
+    
+    def deposit(self, account_name, amount):
+        if account_name in self.accounts:
+            account = self.accounts[account_name]
+            account.deposit(amount)
+            print(f"${amount} deposited to {account_name} successfully")
+        else:
+            print("Account not found.")
+    
+    def withdraw(self, account_name, amount):
+        if account_name in self.accounts:
+            account = self.accounts[account_name]
+            account.withdraw(amount)
+        else:
+            print("Account not found.")
+    
+    def display_account_info(self, account_name):
+        if account_name in self.accounts:
+            account = self.accounts[account_name]
+            print(f"Account: {account_name}")
+            account.display_account_info()
+        else:
+            print("Account not found.")
+    
+    def yield_interest(self, account_name):
+        if account_name in self.accounts:
+            account = self.accounts[account_name]
+            account.yield_interest()
+            print(f"Interest yielded for {account_name}")
+        else:
+            print("Account not found.")
+    
