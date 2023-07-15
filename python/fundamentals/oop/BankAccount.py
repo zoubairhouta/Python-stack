@@ -1,20 +1,18 @@
 class BankAccount:
-    accounts=[]
-    def __init__(self, int_rate, balance=0):
+    def __init__(self, int_rate=0, balance=0):
         self.int_rate = int_rate
         self.balance = balance
-        BankAccount.accounts.append(self)
 
     def deposit(self, amount):
         self.balance += amount
         return self
 
     def withdraw(self, amount):
-        if amount <= self.balance:
+        if self.balance >= amount:
             self.balance -= amount
-            print(f"${amount} withdrawn successfully")
         else:
-            print("Insufficient funds!")
+            print("Insufficient funds: Charging a $5 fee")
+            self.balance -= 5
         return self
 
     def display_account_info(self):
@@ -22,22 +20,25 @@ class BankAccount:
         return self
 
     def yield_interest(self):
-        self.balance *= 1 + self.int_rate
+        if self.balance > 0:
+            interest = self.balance * (self.int_rate / 100)
+            self.balance += interest
         return self
 
     @classmethod
     def print_all_accounts(cls):
-        for account in cls.accounts:
-            print(f"Balance: ${account.balance}, Interest Rate: {account.int_rate * 100}%")
+        for account in cls.all_accounts:
+            account.display_account_info()
 
+# Create two accounts
+account1 = BankAccount(5, 1000)
+account2 = BankAccount(3, 500)
 
-samir_account = BankAccount(0.02, 1000)
-samira_account = BankAccount(0.03, 500)
-samir_account.deposit(200).deposit(2000).deposit(5000).withdraw(
-    400
-).yield_interest().display_account_info()
-samira_account.deposit(2050).deposit(20500).withdraw(4200).withdraw(4100).withdraw(
-    4200
-).withdraw(4200).display_account_info()
+# Perform operations on account1
+account1.deposit(500).deposit(1000).deposit(200).withdraw(700).yield_interest().display_account_info()
+
+# Perform operations on account2
+account2.deposit(300).deposit(200).withdraw(100).withdraw(50).withdraw(200).withdraw(100).yield_interest().display_account_info()
+
+# Print all account information
 BankAccount.print_all_accounts()
-
